@@ -4,8 +4,8 @@ The goal of this tutorial is to run a demo that builds on four modules.
 
 1. dCache deployment via Docker Compose
 2. Demo to emulate usage of the dCache
-3. Kafka Consumer and Kafka Stream Processor to handle messages generated in response to the emulated dCache usage
-4. Openwhisk with KafkaFeed and sample actions executed in response to file system events in dCache
+3. Kafka Stream Processor to handle messages generated in response to the storage events coming from dCache usage
+4. Openwhisk with KafkaFeed and sample actions executed in response to events filtered in the stream processor
 
 # OpenWhisk
 
