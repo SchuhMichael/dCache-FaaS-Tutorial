@@ -1,0 +1,60 @@
+#
+#  needs .env file with:
+#  - LOCAL_ADDRESS : the ip address of the docker host
+#
+
+version: '2'
+services:
+
+  dc_zk:
+    image: zookeeper
+    restart: always
+
+  dc_pg:
+    image: postgres
+    environment:
+    - POSTGRES_DB=chimera
+    - POSTGRES_PASSWORD=CHANGE_CHIMERA_PASSWORD
+
+  dc_kafka:
+    image: wurstmeister/kafka
+    depends_on:
+    - dc_zk
+    ports:
+    - "9099:9099"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_CREATE_TOPICS: billing:1:1
+      KAFKA_ZOOKEEPER_CONNECT: dc_zk:2181/kafka
+      KAFKA_ADVERTISED_HOST_NAME: $LOCAL_ADDRESS
+      KAFKA_ADVERTISED_PORT: 9099
+      KAFKA_PORT: 9099
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+
+
+  dcache:
+    image: dcache/dcache:4.2
+    depends_on:
+    - dc_pg
+    - dc_zk
+    environment:
+    - LOCALADDRESS=$LOCAL_ADDRESS
+    links:
+    - dc_pg:db-host
+    - dc_zk:zk-host
+    - dc_kafka:kafka-host
+    ports:
+    - "2880:8080"
+    - "2049:2049"
+    - "1094:1094"
+    - "31094:31094"
+    - "22224:22224"
+    - "32049:32049"
+    - "38080:38080"
+    - "8080:8080"
+    - "3880:3880"
+    - "7771:7771"
+    volumes:
+    - ./docker-layout.conf:/opt/dcache/etc/layouts/docker-layout.conf
+    - ./dcache-view:/opt/dcache/share/dcache-view

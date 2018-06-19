@@ -1,0 +1,1 @@
+for FILE in `curl -s $LOCAL_ADDRESS:3880/api/v1/namespace/data/?children=true | grep fileName | grep dat | cut -d":" -f2 | grep '"[-,a-z,0-9,_,.]*"' -Po | cut -d'"' -f2` ;do  curl $LOCAL_ADDRESS:8080/data/$FILE -o $FILE; done

@@ -1,0 +1,22 @@
+version: '2'
+services:
+  stream-zk:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181"
+  kafka:
+    image: schuhm/dice-demo-stream-base
+    depends_on:
+      - stream-zk
+    ports:
+      - "9098:9098"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_CREATE_TOPICS: billing-write:1:1
+      KAFKA_ADVERTISED_HOST_NAME: $LOCAL_ADDRESS
+      KAFKA_ADVERTISED_PORT: 9098
+      KAFKA_PORT: 9098
+      KAFKA_ZOOKEEPER_CONNECT: stream-zk:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
