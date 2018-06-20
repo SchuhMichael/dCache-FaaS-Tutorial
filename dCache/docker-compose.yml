@@ -57,4 +57,4 @@ services:
     - "7771:7771"
     volumes:
     - ./docker-layout.conf:/opt/dcache/etc/layouts/docker-layout.conf
-    - ./dcache-view:/opt/dcache/share/dcache-view
+

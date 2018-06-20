@@ -23,7 +23,7 @@ docker-compose up -d
 # 2. set up openwhisk
 
 cd $DEMO_HOME/ow
-run-ow.sh
+./run-ow.sh
 cd $DEMO_HOME/ow
 export OPENWHISK_HOME=$DEMO_HOME/ow/incubator-openwhisk-devtools/docker-compose/openwhisk-master 
 export OPENWHISK_CLIENT_HOME=$OPENWHISK_HOME/bin

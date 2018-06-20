@@ -21,13 +21,13 @@ import org.apache.kafka.streams.KeyValue;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class KafkaStreams3 {
+public class KafkaStreamProcessor {
 
 public static void main(String[] args) throws JSONException {       
 System.out.println("Welcome, you are running experimental Kafka Streaming for dCache");    
     Properties props = new Properties();
     props.put(StreamsConfig.APPLICATION_ID_CONFIG, "dcache");
-    props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "__LOCAL__ADDRESS__:9099");
+    props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "__LOCAL_ADDRESS__:9099");
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
 
     final Serde < String > stringSerde = Serdes.String();
