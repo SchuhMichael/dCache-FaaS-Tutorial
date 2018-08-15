@@ -55,7 +55,7 @@ export WSK_AUTH=`cat $OPENWHISK_HOME/ansible/files/auth.guest`
 
 cd $DEMO_HOME/kafka-stream
 docker-compose up -d
-STREAM_DOCKER_ID=`docker ps -aqf "name=kafka-stream_kafka_1"`
+STREAM_DOCKER_ID=`docker ps -aqf "name=kafka-stream_stream-kafka_1"`
 cp __KafkaStreamProcessor__.java KafkaStreamProcessor.java
 sed -i "s/__LOCAL_ADDRESS__/$LOCAL_ADDRESS/g" KafkaStreamProcessor.java
 
