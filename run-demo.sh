@@ -96,6 +96,7 @@ docker run -id -e DB_PREFIX=$DB_PREFIX -e DB_URL=$DB_URL -e DB_USER=$DB_USER -e 
 # you can optionally edit the codes in $DEMO_HOME/dice-game/, build from Dockerfile and push to your own repository, then you'd need to edit the '--docker /schuhm/x' links below 
 
 cd $DEMO_HOME/dice-game/docker-check-fraud
+cp __check_fraud__.py check_fraud.py
 sed -i "s/__LOCAL_ADDRESS__/$LOCAL_ADDRESS/g" check_fraud.py
 
 docker build -t schuhm/dice-demo-check .
