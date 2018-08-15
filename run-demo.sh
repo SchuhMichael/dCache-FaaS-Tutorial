@@ -58,7 +58,7 @@ docker exec -w /opt/streams/streams.examples $STREAM_DOCKER_ID bash -c 'mvn clea
 docker exec -d -w /opt/streams/streams.examples $STREAM_DOCKER_ID bash -c 'nohup mvn exec:java -Dexec.mainClass=myapps.KafkaStreamProcessor &'
 #</ToDo>
 
-# install the kafka feed package in OpenWhisk
+# 4. install the kafka feed package in OpenWhisk
 
 cd $DEMO_HOME/ow-kafka
 
@@ -81,8 +81,15 @@ docker run -id -e DB_PREFIX=$DB_PREFIX -e DB_URL=$DB_URL -e DB_USER=$DB_USER -e 
 ./installKafka.sh $WSK_AUTH_SYS $EDGEHOST $DB_URL_FULL $DB_PREFIX $APIHOST
 
 
-# plug in the dice app
+# 5. plug in the dice app
+
 # you can optionally edit the codes in $DEMO_HOME/dice-game/, build from Dockerfile and push to your own repository, then you'd need to edit the '--docker /schuhm/x' links below 
+
+cd $DEMO_HOME/dice-game/docker-check-fraud
+sed -i "s/__LOCAL_ADDRESS__/$LOCAL_ADDRESS/g" check_fraud.py
+
+docker build -t schuhm/dice-demo-check .
+docker push schuhm/dice-demo-check
 
 wsk -i property set --auth $WSK_AUTH
 
@@ -99,7 +106,7 @@ wsk -i trigger fire dcache-full-trigger -p "dcache-full-trigger creation_time" "
 wsk -i trigger create dcache-write-trigger -f /whisk.system/messaging/kafkaFeed -p brokers $LOCAL_ADDRESS:9098 -p topic billing-write -p isJSONData True 
 wsk -i rule create dcache-write-rule dcache-write-trigger dice-demo-check
 
-# check that it worked:
+# 6. run it, check that it worked:
 
 RUN_N_TIMES=2
 for ((i=0;i<$RUN_N_TIMES;i++)); do wsk -i action invoke dice-demo-throw -p path $LOCAL_ADDRESS:8080/data/ -b || break ; done

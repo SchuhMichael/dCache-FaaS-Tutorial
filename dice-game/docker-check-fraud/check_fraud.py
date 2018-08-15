@@ -17,7 +17,7 @@ def main(args_in):
         
     for msg in args['messages']:
         print ("resolved message: ", msg)
-        server_name = "http://192.168.43.167:8080"
+        server_name = "http://__LOCAL_ADDRESS__:8080"
         path = msg['value']['billingPath']
         f_name = server_name + path
         b_name = os.path.basename(f_name)[:-4]
