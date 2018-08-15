@@ -4,8 +4,8 @@ services:
     image: wurstmeister/zookeeper
     ports:
       - "2181"
-  kafka:
-    image: schuhm/dice-demo-stream-base
+  stream-kafka:
+    image: schuhm/dice-demo-kafka-stream
     depends_on:
       - stream-zk
     ports:
