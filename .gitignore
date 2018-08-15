@@ -1,3 +1,5 @@
+dice-game/docker-check-fraud/check_fraud.py
 kafka-stream/KafkaStreamProcessor.java
 ow/*
+ow-kafka/incubator-openwhisk-package-kafka/*
 

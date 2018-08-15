@@ -106,14 +106,10 @@ wsk -i property set --auth $WSK_AUTH
 wsk -i action create dice-demo-throw --docker schuhm/dice-demo-throw
 wsk -i action create dice-demo-check --docker schuhm/dice-demo-check
 
-
-# this will echo each batch of messages received from dCache
-wsk -i trigger create dcache-full-trigger -f /whisk.system/messaging/kafkaFeed -p brokers $LOCAL_ADDRESS:9099 -p topic billing -p isJSONData True 
-wsk -i rule create dcache-full-rule dcache-full-trigger /whisk.system/utils/echo
-wsk -i trigger fire dcache-full-trigger -p "dcache-full-trigger creation_time" "`date`"
-
-# this will echo run the analysis and visualization on the data
+# at first attempt this fails, no idea why
 wsk -i trigger create dcache-write-trigger -f /whisk.system/messaging/kafkaFeed -p brokers $LOCAL_ADDRESS:9098 -p topic billing-write -p isJSONData True 
+# so we do it twice --- how ugly --- bug: (https://github.com/SchuhMichael/dCache-FaaS-Tutorial/issues/2)
+
 wsk -i rule create dcache-write-rule dcache-write-trigger dice-demo-check
 
 # 6. run it, check that it worked:
@@ -128,6 +124,11 @@ for ((i=0;i<$RUN_N_TIMES;i++)); do wsk -i action invoke dice-demo-throw -p path 
 # $DEMO_HOME/dice-game/retrieve-images/get-data.sh
 # $DEMO_HOME/dice-game/retrieve-images/get-images.sh
 
+# check dCache View: http://localhost:3880/
+
+# read the kafka messages issued by dCache: 
+# kafka_2.11-2.0.0/bin/kafka-console-consumer.sh --bootstrap-server localhost:9098 --topic billing-write --from-beginning
+# kafka_2.11-2.0.0/bin/kafka-console-consumer.sh --bootstrap-server localhost:9099 --topic billing --from-beginning
 
 
 
