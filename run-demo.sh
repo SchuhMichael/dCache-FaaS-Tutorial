@@ -20,6 +20,16 @@ cd $DEMO_HOME/dCache
 
 docker-compose up -d
 
+# health check 
+# <ToDo>: use container functionality provided for healthchecks
+echo "waiting for dCache to come up ... "
+echo test > test
+until curl -sf --upload test $LOCAL_ADDRESS:8080; curl -sf  $LOCAL_ADDRESS:8080/test; do printf '.'; sleep 5; done
+rm test 
+curl -X DELETE $LOCAL_ADDRESS:8080/test
+#</ToDo>
+
+
 # 2. set up openwhisk
 
 cd $DEMO_HOME/ow
