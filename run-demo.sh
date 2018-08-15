@@ -30,16 +30,26 @@ curl -X DELETE $LOCAL_ADDRESS:8080/test
 #</ToDo>
 
 
+
 # 2. set up openwhisk
 
-cd $DEMO_HOME/ow
-./run-ow.sh
+rm -rf $DEMO_HOME/ow
+mkdir $DEMO_HOME/ow
 cd $DEMO_HOME/ow
 export OPENWHISK_HOME=$DEMO_HOME/ow/incubator-openwhisk-devtools/docker-compose/openwhisk-master 
 export OPENWHISK_CLIENT_HOME=$OPENWHISK_HOME/bin
 export PATH=$PATH:$OPENWHISK_CLIENT_HOME
+export DOCKER_HOST_IP=localhost
+git clone https://github.com/apache/incubator-openwhisk-devtools.git
+cd incubator-openwhisk-devtools/docker-compose
+
+make download download-cli docker_pull 
+#now self-signed certificates are in ~/tmp, optionally add them to system certs
+make setup start-docker-compose init-couchdb init-whisk-cli init-api-management add-catalog
+
 export WSK_AUTH_SYS=`cat $OPENWHISK_HOME/ansible/files/auth.whisk.system`
 export WSK_AUTH=`cat $OPENWHISK_HOME/ansible/files/auth.guest`
+
 
 # 3. run the kafka stream processor 
 
